@@ -1,5 +1,9 @@
 !define APP_NAME "<%= name %>"
 !define APP_DIR "${APP_NAME}"
+!define RUNNING_X64 "<%= isX64 %>"
+
+!include 'LogicLib.nsh'
+!include "x64.nsh"
 
 Name "${APP_NAME}"
 
@@ -14,7 +18,13 @@ Name "${APP_NAME}"
 OutFile "<%= out %>\${APP_NAME} Setup.exe"
 
 # set the installation directory
-InstallDir "$PROGRAMFILES\${APP_NAME}\"
+var INSTDIR
+${If} ${RUNNING_X64}
+  StrCpy $INSTDIR "$PROGRAMFILES64\${APP_NAME}"
+${Else}
+  StrCpy $INSTDIR "$PROGRAMFILES\${APP_NAME}"
+${EndIf}
+InstallDir "$INSTDIR"
 
 # app dialogs
 !insertmacro MUI_PAGE_WELCOME
